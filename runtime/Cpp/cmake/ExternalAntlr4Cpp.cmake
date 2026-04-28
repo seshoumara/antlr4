@@ -8,7 +8,10 @@ include(ExternalProject)
 
 set(ANTLR4_ROOT ${CMAKE_CURRENT_BINARY_DIR}/antlr4_runtime/src/antlr4_runtime)
 set(ANTLR4_INCLUDE_DIRS ${ANTLR4_ROOT}/runtime/Cpp/runtime/src)
-set(ANTLR4_GIT_REPOSITORY https://github.com/antlr/antlr4.git)
+
+if(NOT DEFINED ANTLR4_GIT_REPOSITORY)
+  set(ANTLR4_GIT_REPOSITORY https://github.com/antlr/antlr4.git)
+endif()
 if(NOT DEFINED ANTLR4_TAG)
   # Set to branch name to keep library updated at the cost of needing to rebuild after 'clean'
   # Set to commit hash to keep the build stable and does not need to rebuild after 'clean'
@@ -97,6 +100,10 @@ if(ANTLR4_ZIP_REPOSITORY)
           -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
           -DWITH_STATIC_CRT:BOOL=${ANTLR4_WITH_STATIC_CRT}
           -DDISABLE_WARNINGS:BOOL=ON
+          -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
+          -DCMAKE_CXX_FLAGS:STRING=-fPIC
+          -DCMAKE_C_FLAGS:STRING=-fPIC
+          -DANTLR4_BUILD_STATIC:BOOL=ON
           # -DCMAKE_CXX_STANDARD:STRING=17 # if desired, compile the runtime with a different C++ standard
           # -DCMAKE_CXX_STANDARD:STRING=${CMAKE_CXX_STANDARD} # alternatively, compile the runtime with the same C++ standard as the outer project
       INSTALL_COMMAND ""
@@ -116,6 +123,10 @@ else()
           -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
           -DWITH_STATIC_CRT:BOOL=${ANTLR4_WITH_STATIC_CRT}
           -DDISABLE_WARNINGS:BOOL=ON
+          -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
+          -DCMAKE_CXX_FLAGS:STRING=-fPIC
+          -DCMAKE_C_FLAGS:STRING=-fPIC
+          -DANTLR4_BUILD_STATIC:BOOL=ON
           # -DCMAKE_CXX_STANDARD:STRING=17 # if desired, compile the runtime with a different C++ standard
           # -DCMAKE_CXX_STANDARD:STRING=${CMAKE_CXX_STANDARD} # alternatively, compile the runtime with the same C++ standard as the outer project
       INSTALL_COMMAND ""
